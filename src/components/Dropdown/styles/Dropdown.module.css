@@ -1,0 +1,60 @@
+.dropdown {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+.dropdown > button {
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+}
+.dropdown > button > div:hover {
+  background: transparent;
+}
+.dropdown > button:disabled {
+  border: 1px dashed grey;
+  cursor: not-allowed;
+}
+.dropdown > button > div:first-child {
+  border: none;
+}
+.dropdownContent {
+  position: absolute;
+  min-width: 160px;
+  width: 100%;
+  z-index: 1;
+  border-bottom: 1px solid black;
+}
+.open {
+  display: block;
+}
+.hide {
+  display: none;
+}
+.arrowDown {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  margin-bottom: 5px;
+}
+.arrowEnabled {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  padding: 3px;
+  align-self: center;
+  margin-right: 5px;
+}
+.arrowUp {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+.arrowDisabled {
+  border: solid grey;
+  border-width: 0 3px 3px 0;
+  padding: 3px;
+  align-self: center;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
