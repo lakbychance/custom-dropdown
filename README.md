@@ -1,7 +1,7 @@
 # This project showcases a reusable Dropdown Component built from scatch using React.js.<br/>
 
 ## Features:-
-* Doesn't depened on any css framework (like Bootstrap). Implemented using pure javascript.
+* Doesn't depend on any css framework (like Bootstrap). Implemented using pure javascript.
 * Enables the user to select single option from dropdown.
 * Is Keyboard accessible i.e up and down arrow keys can be used to navigate through dropdown options.
 * Includes few unit test cases covering keyboard accessibility as well.
