@@ -2,15 +2,12 @@ export const handleArrowKeys = (event: any) => {
   if (event.keyCode === 40) {
     if (event.target.nextElementSibling)
       event.target.nextElementSibling.focus();
-    else return false;
+    else event.target.parentNode.firstElementChild.focus();
   }
   if (event.keyCode === 38) {
     if (event.target.previousElementSibling)
       event.target.previousElementSibling.focus();
-    else {
-      event.target.parentNode.previousElementSibling.focus();
-      return false;
-    }
+    else event.target.parentNode.lastElementChild.focus();
   }
   return true;
 };

@@ -57,10 +57,7 @@ describe("Dropdown Success", () => {
     expect(log).toHaveBeenCalledWith(options[0]);
   });
   it("Dropdown is open and user clicks in window", async () => {
-    const { container, getByTestId } = render(<Dropdown {...dropdownProps} />);
-    const dropdownContent = await waitForElement(() =>
-      getByTestId("dropdown-content")
-    );
+    const { getByTestId } = render(<Dropdown {...dropdownProps} />);
     const dropdownButton = await waitForElement(() =>
       getByTestId("dropdown-button")
     );

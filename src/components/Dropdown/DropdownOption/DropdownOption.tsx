@@ -11,11 +11,9 @@ export const DropdownOption = (props: DropdownOptionProps) => {
   const handleKeyEvents = (event: any, option: IDropdownOption) => {
     const isArrowKeyEvent = event.keyCode === 40 || event.keyCode === 38;
     const isEnterEvent = event.keyCode === 13;
-    let toggleState: boolean;
     if (isArrowKeyEvent) {
-      toggleState = handleArrowKeys(event);
+      handleArrowKeys(event);
       event.preventDefault();
-      if (!toggleState) toggleDropdown(toggleState);
     }
     if (isEnterEvent) {
       handleOption(event, option);

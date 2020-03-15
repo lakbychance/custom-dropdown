@@ -14,13 +14,14 @@ export const Dropdown = (props: DropdownProps) => {
     disabled
   } = props;
 
-  //react state
+  //state
   const [isOpen, toggleDropdown] = useState(false);
   const [shouldFlip, toggleFlip] = useState(false);
 
-  //react-hooks
+  //effects
   useEffect(() => {
     window.addEventListener("click", () => toggleDropdown(false));
+    window.addEventListener("blur", () => toggleDropdown(false));
   });
 
   //event handlers
