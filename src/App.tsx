@@ -28,7 +28,7 @@ function App() {
           getSelectedOption={updateSelectedOption}
           options={options}
           defaultText={defaultText}
-          maxResults={21}
+          maxResults={10}
           heightOfOption={35}
         />
       </div>
