@@ -1,5 +1,10 @@
 import { ReactFragment } from "react";
 
+export interface IDropdownOption {
+  value: string;
+  content: ReactFragment;
+}
+
 export interface DropdownProps {
   selectedOption: IDropdownOption;
   options: IDropdownOption[];
@@ -10,7 +15,17 @@ export interface DropdownProps {
   disabled?: boolean;
 }
 
-export interface IDropdownOption {
-  value: string;
-  content: ReactFragment;
+export interface DropdownOptionProps {
+  option: IDropdownOption;
+  getSelectedOption: (option: IDropdownOption) => void;
+  selectedOption: IDropdownOption;
+  toggleDropdown: (isOpen: boolean) => void;
+}
+
+export interface DropdownButtonProps {
+  isOpen: boolean;
+  toggleDropdown: (isOpen: boolean) => void;
+  shouldFlip: boolean;
+  children: ReactFragment;
+  disabled?: boolean;
 }

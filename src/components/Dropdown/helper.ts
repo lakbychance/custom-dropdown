@@ -1,22 +1,30 @@
 export const handleArrowKeys = (event: any) => {
   if (event.keyCode === 40) {
-    if (event.target.nextElementSibling)
-      event.target.nextElementSibling.focus();
-    else event.target.parentNode.firstElementChild.focus();
+    const nextOption = event.target.nextElementSibling;
+    const lastOption = event.target.parentNode.firstElementChild;
+    if (nextOption) nextOption.focus();
+    else lastOption.focus();
   }
   if (event.keyCode === 38) {
-    if (event.target.previousElementSibling)
-      event.target.previousElementSibling.focus();
-    else event.target.parentNode.lastElementChild.focus();
+    const prevOption = event.target.previousElementSibling;
+    const firstOption = event.target.parentNode.lastElementChild;
+    if (prevOption) prevOption.focus();
+    else firstOption.focus();
   }
-  return true;
 };
-export const handleArrowForDropDownButton = (event: any) => {
+export const handleArrowForDropDownButton = (
+  event: any,
+  shouldFlip: boolean
+) => {
   const nextOption =
-    event.target.nextElementSibling &&
-    event.target.nextElementSibling.firstElementChild;
-  const hasOptions = event.keyCode && event.keyCode === 40 && nextOption;
-  if (hasOptions) {
+    event.target.nextElementSibling && !shouldFlip
+      ? event.target.nextElementSibling.firstElementChild
+      : event.target.nextElementSibling.lastElementChild;
+  const hasOptions = event.keyCode && nextOption;
+  const canNavigate =
+    (hasOptions && !shouldFlip && event.keyCode === 40) ||
+    (shouldFlip && event.keyCode === 38);
+  if (canNavigate) {
     nextOption.focus();
     event.preventDefault();
   }
@@ -26,16 +34,11 @@ export const handleFlip = (
   shouldFlip: boolean,
   maxHeight: number
 ) => {
-  if (
-    !shouldFlip &&
-    element?.getBoundingClientRect().y + maxHeight >= window.innerHeight
-  ) {
+  const elementHeight = element?.getBoundingClientRect().y + maxHeight;
+  if (!shouldFlip && elementHeight >= window.innerHeight) {
     return true;
   }
-  if (
-    shouldFlip &&
-    element?.getBoundingClientRect().y + maxHeight < window.innerHeight
-  ) {
+  if (shouldFlip && elementHeight < window.innerHeight) {
     return false;
   }
 };

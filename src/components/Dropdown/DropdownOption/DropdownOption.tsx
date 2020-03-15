@@ -1,38 +1,45 @@
-import { DropdownOptionProps } from "./IDropdownOption";
+import { DropdownOptionProps } from "../IDropdown";
 import { IDropdownOption } from "../IDropdown";
-import React from "react";
+import React, { useCallback } from "react";
 import { handleArrowKeys } from "../helper";
 import styles from "./styles/DropdownOption.module.css";
-export const DropdownOption = (props: DropdownOptionProps) => {
+
+export const DropdownOption: React.FC<DropdownOptionProps> = (
+  props: DropdownOptionProps
+) => {
   //props
   const { option, getSelectedOption, toggleDropdown, selectedOption } = props;
 
-  //event handlers
-  const handleKeyEvents = (event: any, option: IDropdownOption) => {
+  //hooks
+  const handleKeyEvents = useCallback((event: any) => {
     const isArrowKeyEvent = event.keyCode === 40 || event.keyCode === 38;
-    const isEnterEvent = event.keyCode === 13;
     if (isArrowKeyEvent) {
       handleArrowKeys(event);
       event.preventDefault();
     }
-    if (isEnterEvent) {
-      handleOption(event, option);
-    }
-  };
+  }, []);
+  const handleOption = useCallback(
+    (event: any, option: IDropdownOption) => {
+      toggleDropdown(false);
+      getSelectedOption(option);
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    [getSelectedOption, toggleDropdown]
+  );
 
-  const handleOption = (event: any, option: IDropdownOption) => {
-    toggleDropdown(false);
-    getSelectedOption(option);
-  };
-
-  //conditionals
+  //variable assignments
   const isSelected = selectedOption.value === option.value;
 
   //JSX
   return (
-    <button
-      className={styles.dropdownOptionButton}
-      onKeyDown={e => handleKeyEvents(e, option)}
+    <a
+      role="button"
+      href="#"
+      tabIndex={0}
+      className={styles.dropdownOption}
+      onKeyDown={e => handleKeyEvents(e)}
+      onClick={e => handleOption(e, option)}
     >
       <div
         className={`${isSelected ? styles.selected : styles.notSelected}`}
@@ -40,6 +47,6 @@ export const DropdownOption = (props: DropdownOptionProps) => {
       >
         {option.content}
       </div>
-    </button>
+    </a>
   );
 };

@@ -19,6 +19,7 @@ const dropdownProps: DropdownProps = {
   }
 };
 describe("Dropdown Success", () => {
+  const log = jest.spyOn(global.console, "log");
   it("Dropdown is closed", async () => {
     const { getByTestId } = render(<Dropdown {...dropdownProps} />);
     const dropdownButton = await waitForElement(() =>
@@ -33,12 +34,11 @@ describe("Dropdown Success", () => {
     );
     const buttonClicked = fireEvent.click(dropdownButton);
     expect(buttonClicked).toBe(true);
-    const dropdownOption = container.querySelector(".dropdownOptionButton");
+    const dropdownOption = container.querySelector(".dropdownOption");
     expect(dropdownButton).toHaveTextContent("Please Select");
     expect(dropdownOption).toHaveTextContent(options[0].value);
   });
   it("Dropdown is open and user navigates through it", async () => {
-    const log = jest.spyOn(global.console, "log");
     const { container, getByTestId } = render(<Dropdown {...dropdownProps} />);
     const dropdownButton = await waitForElement(() =>
       getByTestId("dropdown-button")
@@ -48,22 +48,24 @@ describe("Dropdown Success", () => {
     });
     expect(keyDown).toBe(true);
     fireEvent.keyDown(dropdownButton, { keyCode: 40 });
-    const dropdownOptions = container.querySelectorAll(".dropdownOptionButton");
+    const dropdownOptions = container.querySelectorAll(".dropdownOption");
     fireEvent.keyDown(dropdownOptions[0], { keyCode: 40 });
-    fireEvent.keyDown(dropdownOptions[1], { keyCode: 13 });
+    fireEvent.click(dropdownOptions[1], { keyCode: 13 });
     expect(log).toHaveBeenCalledWith(options[1]);
-    fireEvent.keyDown(dropdownOptions[0], { keyCode: 40 });
-    fireEvent.keyDown(dropdownOptions[0], { keyCode: 13 });
+    fireEvent.keyDown(dropdownOptions[1], { keyCode: 38 });
+    fireEvent.click(dropdownOptions[0], { keyCode: 13 });
     expect(log).toHaveBeenCalledWith(options[0]);
   });
-  it("Dropdown is open and user clicks in window", async () => {
+  it("Dropdown is open and user clicks or focuses out of dropdown", async () => {
     const { getByTestId } = render(<Dropdown {...dropdownProps} />);
     const dropdownButton = await waitForElement(() =>
       getByTestId("dropdown-button")
     );
     fireEvent.click(dropdownButton);
-    expect(dropdownButton).toHaveTextContent("Please Select");
     fireEvent.click(window);
+    expect(dropdownButton).toHaveTextContent(options[0].value);
+    fireEvent.click(dropdownButton);
+    fireEvent.blur(window);
     expect(dropdownButton).toHaveTextContent(options[0].value);
   });
 });

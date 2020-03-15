@@ -1,9 +1,12 @@
-import React, { useState, useEffect, CSSProperties } from "react";
+import React, { useState, CSSProperties, useCallback } from "react";
 import styles from "./styles/Dropdown.module.css";
 import { DropdownProps, IDropdownOption } from "./IDropdown";
 import { DropdownOption } from "./DropdownOption/DropdownOption";
-import { handleArrowForDropDownButton, handleFlip } from "./helper";
-export const Dropdown = (props: DropdownProps) => {
+import { handleFlip } from "./helper";
+import { DropdownButton } from "./DropdownButton/DropdownButton";
+
+export const Dropdown: React.FC<DropdownProps> = (props: DropdownProps) => {
+  //props
   const {
     options,
     selectedOption,
@@ -14,36 +17,24 @@ export const Dropdown = (props: DropdownProps) => {
     disabled
   } = props;
 
-  //state
+  //state hooks
   const [isOpen, toggleDropdown] = useState(false);
   const [shouldFlip, toggleFlip] = useState(false);
 
-  //effects
-  useEffect(() => {
-    window.addEventListener("click", () => toggleDropdown(false));
-    window.addEventListener("blur", () => toggleDropdown(false));
-  });
+  //other hooks
+  const handleDropdownFlip = useCallback(
+    element => {
+      const flip = handleFlip(element, shouldFlip, maxResults * heightOfOption);
+      const flipState = flip !== undefined ? flip : shouldFlip;
+      toggleFlip(flipState);
+    },
+    [shouldFlip, maxResults, heightOfOption]
+  );
 
-  //event handlers
-  const handleDropdown = (event: any) => {
-    if (event.type === "keydown") {
-      handleArrowForDropDownButton(event);
-    }
-    if (event.type === "click") {
-      toggleDropdown(!isOpen);
-      event.stopPropagation();
-    }
-  };
-  const handleDropdownFlip = (element: any) => {
-    const flip = handleFlip(element, shouldFlip, maxHeight);
-    const flipState = flip !== undefined ? flip : shouldFlip;
-    toggleFlip(flipState);
-  };
-
-  //conditionals
+  //variable assignments
+  const maxHeight = maxResults * heightOfOption;
   const dropdownStatus = isOpen ? styles.open : styles.hide;
   const isMoreThanMax = options.length > maxResults;
-  const maxHeight = maxResults * heightOfOption;
   const scrollStyle: CSSProperties = isMoreThanMax
     ? { maxHeight: `${maxHeight}px`, overflowY: "scroll" }
     : {};
@@ -54,19 +45,15 @@ export const Dropdown = (props: DropdownProps) => {
   //JSX
   return (
     <div ref={el => handleDropdownFlip(el)} className={styles.dropdown}>
-      <button
-        onClick={e => handleDropdown(e)}
-        onKeyDown={e => handleDropdown(e)}
+      <DropdownButton
+        toggleDropdown={toggleDropdown}
+        shouldFlip={shouldFlip}
+        isOpen={isOpen}
         disabled={disabled}
-        data-testid="dropdown-button"
       >
         {!isOpen ? selectedOption.content : defaultText.content}
-        <div
-          className={`${!isOpen ? styles.arrowDown : styles.arrowUp} ${
-            disabled ? styles.arrowDisabled : styles.arrowEnabled
-          }`}
-        ></div>
-      </button>
+      </DropdownButton>
+
       <div
         style={{ ...scrollStyle, ...flipStyle }}
         className={`${styles.dropdownContent} ${dropdownStatus}`}
